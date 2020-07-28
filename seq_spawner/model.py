@@ -210,7 +210,7 @@ class Model(object):
 
             num_motifs = len(motif_pwm)  # only works if motifs is inputted as a list
 
-            sample = []  # initialize empty sequence
+            sample = ""  # initialize empty sequence
 
             poss_motif = []  # initialize empty list for positions
 
