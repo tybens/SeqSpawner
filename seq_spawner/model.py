@@ -172,7 +172,7 @@ class Model(object):
                                                                                              pos_motif_sorted[
                                                                                                  ii - 1][
                                                                                                  1] + 1)))
-                        if pos_cur >= length - motif_cur_pwm.shape[1]:
+                        if pos_cur-1 > length - motif_cur_pwm.shape[1]:
                             raise ValueError(
                                 "motif number {} generated outside of DNA sequence".format(str(index_cur + 1)))
                         if len(sample) == 0 and pos_cur <= 0:
@@ -273,7 +273,7 @@ class Model(object):
                         ii -= 1  # don't add to ii because it will be index out of range (we deleted a value in the
                         # list)
 
-                if pos_cur >= length - len(
+                if pos_cur - 1 > length - len(
                         motif_cur_pwm):
                     raise ValueError("motif number {} generated outside of DNA sequence".format(str(index_cur + 1)))
                 if len(sample) == 0 and pos_cur <= 0:
