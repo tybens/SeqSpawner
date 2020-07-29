@@ -69,7 +69,9 @@ class PWM(FixedLengthMotif):
         """
         seq = []
         for i in range(self._pwm.shape[1]):
-            seq.extend(numpy.random.choice(self.alphabet, p=self._pwm[:, i]))
+            p = numpy.array(self._pwm[:, i], dtype=numpy.float64)
+            p /= p.sum()
+            seq.extend(numpy.random.choice(self.alphabet, p=p))
         return "".join(seq)
 
     def size(self):
