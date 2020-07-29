@@ -33,7 +33,7 @@ def simulate_background_then_motif(pos_motif, motif_pwm, alphabet, background_we
     # motif
     for i in range(motif_pwm.shape[1]):
         # normalize:
-        p = numpy.array(motif_pwm[:, i])
+        p = numpy.array(motif_pwm[:, i], dtype=numpy.float64)
         p /= p.sum()
         seq += "".join(numpy.random.choice(alphabet, 1, p=p))
 
