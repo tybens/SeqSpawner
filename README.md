@@ -28,8 +28,6 @@ python setup.py develop
         A list of weights in float between 0 and 1 representing the background nucleotide probabilities.
     dist_fn : list(function)
         A list of functions for each motif that when called outputs a random int position for the motif.
-        For an example function: def binom():
-                                    return scipy.stats.binom.rvs(...)
     length : int
         The desired total length of each sequence
     motif_names : list(str), optional
