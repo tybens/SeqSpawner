@@ -2,6 +2,14 @@
 
 An object-oriented Python library for simulating biological sequences.
 
+
+## Installation
+```
+git clone https://github.com/tybens/seqspawner.git
+cd seqspawner
+python setup.py develop
+```
+
 ##### Model(object):
 ``` This class holds all of the parameters and allows for sequence simulation
 
@@ -54,41 +62,67 @@ list(float)
     
 ### Examples:
 #### Single Motif Embedded
-```# load position weight matrix from .meme file
-ctcf_pwm = PWM.from_meme_file("/home/tylerbenson/CTCF.meme")  
+```from seqspawner import motifs
+from seqspawner.model import Model
+
+# load position weight matrix from .meme file
+ctcf_pwm = motifs.PWM.from_meme_file("/home/tylerbenson/CTCF.meme")
 
 # function that returns motif location
-loc_fn_10 = lambda: 10                         
+loc_fn_10 = lambda: 10
 
-# background weights 
+# background weights
 background = [0.25, 0.25, 0.25, 0.25]
 
-model = Model("test1", 
-              pwm.alphabet,
-              pwm,
+model = Model("test1",
+                ctcf_pwm.alphabet,
+                ctcf_pwm,
+                background,
+                loc_fn_10,
+                length=50)
+model.sample(num_samples=10)
+
+OUTPUT:
+['GACAACACGTCTCCAGCAGGGGGAGCTATAGCAAATGATATTCCTAAGTT',
+ 'CGCGTACCATGGACTCCAGGTGGCGCAAAGACAGTCCTAGGACCACCTTG',
+ 'GTAATATCGTGGCCTCAAGGTGGCGGTGGCAGAGGAAGCTGTACGTTTAT',
+ 'TGGCGTCATTGGCCACTAGGTGGCGCTTTTTAATCTATGGTCGATAACGC',
+ 'CCTTGGTTGCGCACAGTAGGGGATACTACAATGAGCGCAGAGTACTGTCA',
+ 'GCATGGGGATCGCCACTAGGTGGCACTTTTATATCAGAGAAGTTGACTCC',
+ 'GGGTTTCATTGAACACTAGGTGGCGGTTAAAAAGCATTAGTTGCACCCCC',
+ 'GAGCCCAATTACCCAGCAGGTGGCGCCCCCCGTCTCATACTGTCCTCACC',
+ 'ATATATATGTCGCCTCCAGGTGGCAGTGAATCGGTACAAGCGTAGGAAGT',
+ 'GCTTAGGCATTACCAGGGGAGGGCGCCGTCGCCCGAACTCCCAGTATACA']
+```
+#### Two motifs with variable spacing
+```from seqspawner import motifs
+from seqspawner.model import Model
+import numpy
+
+# initialize PWM motif objects from meme file
+tbp_pwm = motifs.PWM.from_meme_file("/home/tylerbenson/TBP.meme")
+ctcf_pwm = motifs.PWM.from_meme_file("/home/tylerbenson/CTCF.meme")
+
+# all adenines separating the variable separation
+background_pwm = numpy.array([[1], [0], [0], [0]])
+background = [1, 0, 0, 0] # all adenines
+
+
+# function that returns motif location
+loc_fn_10 = lambda: 10
+
+# function that returns 1-4 variable separation nt's
+sep_fn = lambda: int(numpy.random.choice(4))+1
+repeated_bg = motifs.VariableRepeatedMotif(PWM(background_pwm, tbp_pwm.alphabet), sep_fn)
+list_test = motifs.create_motif_list([ctcf_pwm, repeated_bg, tbp_pwm])
+model = Model("test2",
+              list_test.alphabet,
+              list_test,
               background,
               loc_fn_10,
               length=50)
-model.sample(n=1)
-```
-#### Two motifs with variable spacing
-```tbp_pwm = PWM.from_meme_file("/home/tylerbenson/TBP.meme")
-ctcf_pwm = PWM.from_meme_file("/home/tylerbenson/CTCF.meme")
-
-# all adenines separating the variable separation
-background_pwm = numpy.array([[1], [0], [0], [0]])  
-background = [1, 0, 0, 0] # all adenines
-
-sep_fn = lambda: int(numpy.random.choice(4))+1
-repeated_bg = VariableRepeatedMotif(PWM(background_pwm, tbp_pwm.alphabet), sep_fn)
-list_test = create_motif_list([ctcf_pwm, repeated_bg, tbp_pwm])
-model = Model("test2", 
-              list_test.alphabet,
-              list_test,
-              background,   
-              loc_fn_10,
-              length=50)
 model.sample(num_samples=10)
+
 
 OUTPUT:
 ['AAAAAAAAATTAACGCCAGAGGGCGCTCAAAACTATAAATTCCGGGTAAA',
@@ -103,16 +137,23 @@ OUTPUT:
  'AAAAAAAAATGTCCACCTGAGGGAGACAAAAATATAAATACGCAAAAAAA']
 ```
 #### List of motif lists - variable spacing of three motifs with a fourth merged if overlapping
-```
+```from seqspawner import motifs
+from seqspawner.model import Model
+
 # Load motifs
-tbp_pwm = PWM.from_meme_file("/~/TBP.meme")
-ctcf_pwm = PWM.from_meme_file("/~/CTCF.meme")
+tbp_pwm = motifs.PWM.from_meme_file("/~/TBP.meme")
+ctcf_pwm = motifs.PWM.from_meme_file("/~/CTCF.meme")
 
 # create a motif list with lists embedded (list_test and repeated_bg is initialized in above example)
-motif_list_of_lists = create_motif_list([tbp_pwm, repeated_bg, list_test])  # variable spacing of pwm and list_test
-motifs_all = [motif_list_of_lists, tbp_pwm]  # independent spacing of pwm2 and list_inception
-loc_fn_10, loc_fn_20 = lambda:10, lambda: 20          
-dist_fns = [loc_fn_10, loc_fn_20]  # list of position functions for each motif
+motif_list_of_lists = motifs.create_motif_list([tbp_pwm, repeated_bg, list_test])  
+
+# independent spacing list of motif_list_of_lists and tbp_pwm
+motifs_all = [motif_list_of_lists, tbp_pwm]  
+
+# two location functions for the two motifs parsed into the Model
+loc_fn_10, loc_fn_20 = lambda: 10, lambda: 20          
+dist_fns = [loc_fn_10, loc_fn_20]   # parsed as a list
+
 background = [1, 0, 0, 0]
 model = Model("test3", 
               motif_list_of_lists.alphabet,
