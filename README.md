@@ -9,7 +9,7 @@ git clone https://github.com/tybens/seqspawner.git
 cd seqspawner
 python setup.py develop
 ```
-
+### API
 ##### Model(object):
 ``` This class holds all of the parameters and allows for sequence simulation
 
@@ -56,7 +56,7 @@ Returns
 list(float)
     frequency of nucleotides in the background sequence. ['A', 'C', 'G', 'T']
 ```
-
+##### ...
     
 ### Examples:
 #### Single Motif Embedded
