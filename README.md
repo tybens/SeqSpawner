@@ -2,6 +2,16 @@
 
 An object-oriented Python library for simulating biological sequences.
 
+**Description**
+
+This module is interested in modeling noisy biological sequence data.  This holds broad applicability. For example, by simulating biological sequences, we can experiment with different model configurations (models that are meant to learn and output patterns from biological sequences) and test their performance on data where we know the ground truth labels. While some repos such as simDNA attempt to do this, they are rather inflexible, and can only be used to simulate a limited number of patterns
+
+Additionally, SeqSpawner can be used for any sequence alphabet, allowing it to be used for proteins, rna, or even text. It will allow researchers to simulate regulatory sequences from a known ground truth, thereby allowing careful investigation of complex methods such as sequence-based deep learning models.
+
+**Future Work**
+- add functionality to library that allows users to specify grammars for simulating more complex patterns.
+- create methods for generating negative examples for a given grammar
+- develop algorithms to learn the grammar tree from the sequence using unsupervised dependency parsing methods from natural language processing.
 
 ## Installation
 ```
@@ -9,7 +19,7 @@ git clone https://github.com/tybens/seqspawner.git
 cd seqspawner
 python setup.py develop
 ```
-### API
+## API
 ##### Model(object):
 ``` This class holds all of the parameters and allows for sequence simulation
 
