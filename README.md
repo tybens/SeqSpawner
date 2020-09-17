@@ -14,7 +14,7 @@ Additionally, SeqSpawner can be used for any sequence alphabet, allowing it to b
 - develop algorithms to learn the grammar tree from the sequence using unsupervised dependency parsing methods from natural language processing.
 
 ## Installation
-```
+```Bash
 git clone https://github.com/tybens/seqspawner.git
 cd seqspawner
 python setup.py develop
@@ -70,7 +70,8 @@ list(float)
     
 ### Examples:
 #### Single Motif Embedded
-```from seqspawner import motifs
+```Python
+from seqspawner import motifs
 from seqspawner.model import Model
 
 # load position weight matrix from .meme file
@@ -103,7 +104,8 @@ OUTPUT:
  'GCTTAGGCATTACCAGGGGAGGGCGCCGTCGCCCGAACTCCCAGTATACA']
 ```
 #### Two motifs with variable spacing
-```from seqspawner import motifs
+```Python
+from seqspawner import motifs
 from seqspawner.model import Model
 import numpy
 
@@ -145,7 +147,8 @@ OUTPUT:
  'AAAAAAAAATGTCCACCTGAGGGAGACAAAAATATAAATACGCAAAAAAA']
 ```
 #### List of motif lists - variable spacing of three motifs with a fourth merged if overlapping
-```from seqspawner import motifs
+```Python
+from seqspawner import motifs
 from seqspawner.model import Model
 
 # Load motifs
