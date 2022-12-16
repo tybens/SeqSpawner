@@ -1,3 +1,5 @@
+![Banner](banner.png)
+
 # SeqSpawner
 
 An object-oriented Python library for simulating biological sequences.
